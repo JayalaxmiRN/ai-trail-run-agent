@@ -1,2 +1,25 @@
-# ai-trail-run-agent
-AI Trail Run Decision Agent is an intelligent automation system built with n8n and AI agents that analyzes calendar events, weather conditions, air quality, and trail data to recommend whether a user should go for a run. It demonstrates real-time API integration, automated reasoning, and workflow orchestration
+# AI Trail Run Decision Agent
+
+An AI agent built using n8n that decides whether a user should go for a trail run by analyzing:
+
+- Calendar schedule
+- Weather conditions
+- Air quality
+- Trail data
+
+## Tech Stack
+- n8n
+- AI Agent Architecture
+- Groq LLM / OpenAI (optional)
+- Google Calendar API
+- OpenWeatherMap API
+- Google Sheets
+
+## Features
+- Automated reasoning
+- Tool calling
+- Memory-enabled AI agent
+- Real-time decision making
+
+## Author
+Jayalaxmi Reddy
