@@ -1,0 +1,319 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 5
+            },
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -208,
+        240
+      ],
+      "id": "1bcc8f5c-2fe1-46b6-acfa-4d728c5a4cea",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "=customKey",
+        "sessionKey": "=chat_session"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        96,
+        288
+      ],
+      "id": "e9a9756b-cebc-4539-8aaf-09c4c8e96706",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -368,
+        32
+      ],
+      "id": "1201d7df-c867-437e-9d33-4f6b05961796",
+      "name": "When chat message received",
+      "webhookId": "b19b824c-df81-48f9-a323-da473e3b1558"
+    },
+    {
+      "parameters": {
+        "model": "=llama-3.1-8b-instant",
+        "options": {
+          "maxTokensToSample": 150
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        288
+      ],
+      "id": "e0e1bd49-8b76-49f6-a772-3b5f8660e135",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "JPs6y3CboC89OhPm",
+          "name": "Groq account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "You are an AI assistant that decides whether the user should go for a trail run.\n\nAvailable tools:\n- checkCalendar\n- getWeather\n- getAirQuality\n- getHikeList\n- sendMessage\n\nSteps:\n1. Check calendar.\n2. If no \"Trail Run\" event today → stop.\n3. Check air quality. If unhealthy → cancel run.\n4. Check weather.\n5. Get hike list.\n6. Choose best trail.\n7. Send final decision using sendMessage.\n\nKeep reasoning short.\nOnly call tools when needed.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        288,
+        -32
+      ],
+      "id": "4fa79f05-a315-400b-868e-0418603751d9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "jayalaxmireddynathi@gmail.com",
+          "mode": "list",
+          "cachedResultName": "jayalaxmireddynathi@gmail.com"
+        },
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        240,
+        256
+      ],
+      "id": "0af2750e-13f4-4a92-b040-e99ff98e4157",
+      "name": "checkCalendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "Cii7zmCr55BsvccC",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "format": "imperial",
+        "cityName": "hyderabad,india"
+      },
+      "type": "n8n-nodes-base.openWeatherMapTool",
+      "typeVersion": 1,
+      "position": [
+        384,
+        256
+      ],
+      "id": "ec5bcd6e-2eb7-4ae3-b69f-320e4fcbc5be",
+      "name": "getWeather",
+      "credentials": {
+        "openWeatherMapApi": {
+          "id": "IBvyPP22bICKYZUn",
+          "name": "OpenWeatherMap account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.airnowapi.org/aq/observation/zipCode/current/?format=application/json&zipCode=~zipCode~&distance=25&API_KEY=F2E10FEB-3EB2-4FA5-86ED-DC06B950CA28",
+        "options": {},
+        "optimizeResponse": true
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        720,
+        240
+      ],
+      "id": "42d94e01-cbaa-4856-8458-4055ed2ff187",
+      "name": "getAirQuality"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12s9KK_BVhQF63ubnTIYD5Kd8DrugL9Ev47_gl2w67Cw",
+          "mode": "list",
+          "cachedResultName": "weather spreadsheet",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12s9KK_BVhQF63ubnTIYD5Kd8DrugL9Ev47_gl2w67Cw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Weather Data",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        240
+      ],
+      "id": "a577e5d6-3895-455b-90b4-c7b788f6f611",
+      "name": "getHikeList",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "MTcOg4n4iCAicDdC",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "jayalaxmireddyn@gmail.com",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "sample message",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        864,
+        224
+      ],
+      "id": "f2e1abbc-d330-4051-add8-4491f2104056",
+      "name": "sendMessage",
+      "webhookId": "81ffd7b9-fb90-4c4f-95bd-569d9395185d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bor1eYlOR3NB8HSn",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "checkCalendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getWeather": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getAirQuality": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "getHikeList": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "sendMessage": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "8e1f1d4f-2e2f-47af-b434-233ff551c103",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f87fb2c1d8fb6268e6cdec902392aab12f5a202a6a6afb5e0739200fdad3e126"
+  },
+  "id": "hscF4xISoXyisjHC",
+  "tags": []
+}
